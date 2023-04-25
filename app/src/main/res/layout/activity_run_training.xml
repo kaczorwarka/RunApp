@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".RunTraining">
+    <RelativeLayout
+        android:id="@+id/distance_info"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_marginTop="100dp">
+
+        <TextView
+            android:id="@+id/run_distance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:text="Distance"
+            android:textColor="@color/black"
+            android:textSize="50sp" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/name_distance"
+            android:text="@string/distance"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/run_distance"
+            android:textSize="20sp"/>
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/time_info"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_below="@+id/distance_info"
+        android:layout_marginTop="50dp">
+        <TextView
+            android:id="@+id/run_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:text="Peace"
+            android:textColor="@color/black"
+            android:textSize="50sp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:id="@+id/name_time"
+            android:layout_below="@+id/run_time"
+            android:text="@string/time2"
+            android:textSize="20sp"/>
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/speed_info"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_below="@+id/time_info"
+        android:layout_marginTop="50dp">
+        <TextView
+            android:id="@+id/run_speed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:text="Speed"
+            android:textColor="@color/black"
+            android:textSize="50sp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:id="@+id/name_speed"
+            android:layout_below="@+id/run_speed"
+            android:text="@string/speed2"
+            android:textSize="20sp"/>
+    </RelativeLayout>
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="50dp"
+        android:src="@drawable/baseline_play_arrow_24"
+        app:backgroundTint="@color/green"
+        android:backgroundTint="@color/green"
+        android:id="@+id/play_button"/>
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:src="@drawable/baseline_pause_24"
+        android:backgroundTint="@color/red"
+        app:backgroundTint="@color/red"
+        android:id="@+id/pause_button"
+        android:layout_margin="50dp"
+        android:layout_centerHorizontal="true"/>
+
+
+
+
+
+
+</RelativeLayout>

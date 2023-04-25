@@ -15,12 +15,19 @@
         android:layout_below="@+id/new_toolbar"
         android:id="@+id/frame_layout">
 
-        <TextView
-            android:id="@+id/test_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Hello Word" />
 
     </FrameLayout>
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/run_training"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_margin="16dp"
+        android:contentDescription="@string/open_run_training"
+        app:srcCompat="@drawable/baseline_directions_run_24"
+        android:backgroundTint="@color/green_2"
+        app:backgroundTint="@color/green_2" />
 
 </RelativeLayout>

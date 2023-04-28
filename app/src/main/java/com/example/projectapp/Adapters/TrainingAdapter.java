@@ -16,6 +16,7 @@ import org.greenrobot.eventbus.EventBus;
 
 import java.time.Duration;
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class TrainingAdapter extends RecyclerView.Adapter<ViewHolder> {
 
@@ -46,11 +47,20 @@ public class TrainingAdapter extends RecyclerView.Adapter<ViewHolder> {
     public void onBindViewHolder(@NonNull ViewHolder holder, @SuppressLint("RecyclerView") int position) {
 
         String distance = trainings.get(position).getDistance() + " km";
-        Duration duration = trainings.get(position).getTrainingDuration();
-        String time = duration.toHours() + ":";
-        long minutes = duration.toMinutes() - 60*duration.toHours();
-        time += (minutes < 10 ? "0"+minutes : minutes) + " ";
-        String speed = trainings.get(position).getSpeed() + " min/km";
+
+        int duration = trainings.get(position).getTrainingDuration();
+        int hours = duration / 3600;
+        int minutes = (duration % 3600) / 60;
+        int secs = duration % 60;
+        String time = String
+                .format(Locale.getDefault(), "%d:%02d:%02d", hours, minutes, secs);
+
+        double speedD = trainings.get(position).getSpeed();
+        int speedMin = (int)speedD / 60;
+        int speedSek = (int)speedD % 60;
+        String speed = String
+                .format(Locale.getDefault(), "%d:%02d", speedMin, speedSek);
+        
         String temp = trainings.get(position).getTemperature() + " C";
         String date = trainings.get(position).getDate().toString();
 
@@ -60,12 +70,7 @@ public class TrainingAdapter extends RecyclerView.Adapter<ViewHolder> {
         holder.getTime().setText(time);
         holder.getTemp().setText(temp);
         holder.getDate().setText(date);
-        holder.getParent().setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                EventBus.getDefault().post(trainings.get(position));
-            }
-        });
+        holder.getParent().setOnClickListener(view -> EventBus.getDefault().post(trainings.get(position)));
     }
 
     @Override

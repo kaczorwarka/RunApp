@@ -74,6 +74,23 @@
             android:text="@string/speed2"
             android:textSize="20sp"/>
     </RelativeLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Latitude"
+        android:layout_centerHorizontal="true"
+        android:textSize="30sp"
+        android:id="@+id/latitude"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="longitude"
+        android:layout_centerHorizontal="true"
+        android:textSize="30sp"
+        android:id="@+id/longitude"
+        android:layout_below="@+id/latitude"/>
+
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -95,9 +112,17 @@
         android:layout_margin="50dp"
         android:layout_centerHorizontal="true"/>
 
-
-
-
-
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_margin="20dp"
+        android:text="@string/save"
+        android:textSize="20sp"
+        android:textColor="@color/yellow"
+        android:backgroundTint="@color/no"
+        android:background="@color/no"
+        android:id="@+id/save_button"/>
 
 </RelativeLayout>

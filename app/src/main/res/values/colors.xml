@@ -12,4 +12,6 @@
     <color name="no">#00FFFFFF</color>
     <color name="green_2">#C0E343</color>
     <color name="red">#C55050</color>
+    <color name="yellow">#E48805</color>
+    <color name="red_2">#E41B1B</color>
 </resources>

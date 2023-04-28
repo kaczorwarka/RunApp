@@ -15,7 +15,10 @@ import android.view.View;
 import com.example.projectapp.Controller.CalendarViewController;
 import com.example.projectapp.Controller.ListViewController;
 import com.example.projectapp.Objects.Training;
+import com.example.projectapp.Services.SqlService;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import org.osmdroid.config.Configuration;
 
 import java.time.Duration;
 import java.time.LocalDate;
@@ -36,33 +39,17 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         setContentView(R.layout.activity_main);
         super.onCreate(savedInstanceState);
-
-        Duration duration;
-        LocalDate date;
-
-        //ArrayList<Training> trainings = new ArrayList<>();
-
-        duration = Duration.between(LocalTime.of(9,30), LocalTime.of(10,0));
-        date = LocalDate.of(2023,2,15);
-        trainings.add(new Training(22.1, duration, 22, 4, date));
-
-        duration = Duration.between(LocalTime.of(8,0), LocalTime.of(10,0));
-        date = LocalDate.of(2023,4,23);
-        trainings.add(new Training(15, duration, 10, 5.3, date));
+        Configuration.getInstance().setUserAgentValue(BuildConfig.APPLICATION_ID);
 
         //setting appbar
         topAppBar = findViewById(R.id.topAppBar);
         setSupportActionBar(topAppBar);
 
-        replaceFragment(new ListViewController(trainings));
+        SqlService sqlService = new SqlService(this);
+        Training.setId(sqlService.setTrainingId()+1);
 
         runTraining = findViewById(R.id.run_training);
-        runTraining.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                openRunTraining();
-            }
-        });
+        runTraining.setOnClickListener(view -> openRunTraining());
 
     }
 
@@ -87,7 +74,24 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void replaceFragment(Fragment fragment) {
+    @Override
+    protected void onResume() {
+        super.onResume();
+        LocalDate date;
+        trainings.clear();
+        SqlService sqlService = new SqlService(this);
+        trainings.addAll(sqlService.getAll());
+        date = LocalDate.of(2023,2,15);
+        trainings.add(new Training(22.1, 5000, 22, 4, date));
+
+        date = LocalDate.of(2023,4,23);
+        trainings.add(new Training(15, 3500, 10, 5.3, date));
+
+        replaceFragment(new ListViewController(trainings));
+
+    }
+
+    public void replaceFragment(Fragment fragment) {
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();

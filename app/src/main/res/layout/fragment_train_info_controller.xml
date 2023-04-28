@@ -37,7 +37,8 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="100dp"
-        android:layout_below="@+id/time_info">
+        android:layout_below="@+id/time_info"
+        android:id="@+id/other_info">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -72,6 +73,32 @@
                 />
         </LinearLayout>
     </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:id="@+id/map_info"
+        android:layout_below="@+id/other_info"
+        android:layout_centerHorizontal="true">
+        <org.osmdroid.views.MapView
+            android:id="@+id/mapView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            />
+    </RelativeLayout>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="20dp"
+        android:text="@string/delete"
+        android:textSize="20sp"
+        android:textColor="@color/red_2"
+        android:backgroundTint="@color/no"
+        android:background="@color/no"
+        android:id="@+id/delete_button"/>
 
 
 

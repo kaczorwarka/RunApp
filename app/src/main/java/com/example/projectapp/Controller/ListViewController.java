@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import com.example.projectapp.Adapters.TrainingAdapter;
 import com.example.projectapp.Objects.Training;
 import com.example.projectapp.R;
+import com.example.projectapp.Services.SqlService;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -33,6 +34,7 @@ public class ListViewController extends Fragment {
     private ArrayList<Training> trainings;
 
     public ListViewController(ArrayList<Training> trainings) {
+
         this.trainings = trainings;
     }
 

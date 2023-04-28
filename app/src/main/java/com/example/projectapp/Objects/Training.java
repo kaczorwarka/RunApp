@@ -1,19 +1,28 @@
 package com.example.projectapp.Objects;
 
+import android.location.Location;
+
 import java.time.Duration;
 import java.time.LocalDate;
+import java.util.ArrayList;
 
 public class Training {
 
 
     //lack of training id
+    private static int id = 0;
+    private int trainingId;
     private double distance;
-    private Duration trainingDuration;
+    private int trainingDuration;
     private double temperature;
     private double speed;
     private LocalDate date;
+    private ArrayList<Loc> locations = new ArrayList<>();
 
-    public Training(double distance, Duration trainingDuration, double temperature, double speed, LocalDate date) {
+
+    //test adding no db
+    public Training(double distance, int trainingDuration, double temperature,
+                    double speed, LocalDate date) {
         this.distance = distance;
         this.trainingDuration = trainingDuration;
         this.temperature = temperature;
@@ -21,11 +30,38 @@ public class Training {
         this.date = date;
     }
 
+    //adding to db
+    public Training(double distance, int trainingDuration, double temperature,
+                    double speed, LocalDate date, ArrayList<Loc> locations) {
+        this.distance = distance;
+        this.trainingDuration = trainingDuration;
+        this.temperature = temperature;
+        this.speed = speed;
+        this.date = date;
+        this.locations = locations;
+        this.trainingId = id;
+        id++;
+    }
+
+    //getting from db
+    public Training(int trainingId, double distance, int trainingDuration, double temperature,
+                    double speed, LocalDate date) {
+        this.trainingId = trainingId;
+        this.distance = distance;
+        this.trainingDuration = trainingDuration;
+        this.temperature = temperature;
+        this.speed = speed;
+        this.date = date;
+        if(id < trainingId){
+            id = trainingId + 1;
+        }
+    }
+
     public double getDistance() {
         return distance;
     }
 
-    public Duration getTrainingDuration() {
+    public int getTrainingDuration() {
         return trainingDuration;
     }
 
@@ -39,6 +75,22 @@ public class Training {
 
     public LocalDate getDate() {
         return date;
+    }
+
+    public int getTrainingId() {
+        return trainingId;
+    }
+
+    public static int getId() {
+        return id;
+    }
+
+    public static void setId(int id) {
+        Training.id = id;
+    }
+
+    public ArrayList<Loc> getLocations() {
+        return locations;
     }
 
     @Override

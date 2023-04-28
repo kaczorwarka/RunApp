@@ -15,4 +15,6 @@
     <string name="open_run_training">Open run training</string>
     <string name="time2">Time</string>
     <string name="speed2">Speed</string>
+    <string name="save">SAVE</string>
+    <string name="delete">DELETE</string>
 </resources>

@@ -1,11 +1,11 @@
 package com.example.projectapp.Services;
 
-import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
@@ -14,7 +14,6 @@ import com.example.projectapp.Objects.Training;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.List;
 
 public class SqlService extends SQLiteOpenHelper {
 
@@ -96,24 +95,67 @@ public class SqlService extends SQLiteOpenHelper {
         return true;
     }
 
+//    public ArrayList<Training> getAll(){
+//        ArrayList<Training> trainings = new ArrayList<>();
+//
+//        String selectAll = "SELECT * FROM " + training_table +
+//                " ORDER BY " + training_id + " DESC";
+//        SQLiteDatabase db = this.getReadableDatabase();
+//        Cursor cursor = db.rawQuery(selectAll, null);
+//
+//        if(cursor.moveToFirst()){
+//            do{
+//                int id = cursor.getInt(0);
+//                double distance = cursor.getDouble(1);
+//                int time = cursor.getInt(2);
+//                double temp = cursor.getDouble(3);
+//                double speed = cursor.getDouble(4);
+//                LocalDate dateL = LocalDate.parse(cursor.getString(5));
+//                trainings.add(new Training(id, distance, time, temp, speed, dateL));
+//            }while(cursor.moveToNext());
+//        }
+//        cursor.close();
+//        return trainings;
+//    }
+
     public ArrayList<Training> getAll(){
         ArrayList<Training> trainings = new ArrayList<>();
+        ArrayList<Loc> locations = new ArrayList<>();
+        String selectAll = "SELECT * FROM " + training_table +
+                " JOIN " + location_table + " ON " + training_table + "." + training_id + " = " +
+                location_table + "." + training_id +
+                " ORDER BY 1 DESC";
 
-        String selectAll = "SELECT * FROM "+ training_table +
-                " ORDER BY " + training_id + " DESC";
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(selectAll, null);
 
         if(cursor.moveToFirst()){
+            int id = cursor.getInt(0);
+            double distance = cursor.getDouble(1);
+            int time = cursor.getInt(2);
+            double temp = cursor.getDouble(3);
+            double speed = cursor.getDouble(4);
+            double latitude;
+            double longitude;
+            int number;
+            LocalDate date = LocalDate.parse(cursor.getString(5));
             do{
-                int id = cursor.getInt(0);
-                double distance = cursor.getDouble(1);
-                int time = cursor.getInt(2);
-                double temp = cursor.getDouble(3);
-                double speed = cursor.getDouble(4);
-                LocalDate date = LocalDate.parse(cursor.getString(5));
-                trainings.add(new Training(id, distance, time, temp, speed, date));
+                if (id != cursor.getInt(0)) {
+                    trainings.add(new Training(id, distance, time, temp, speed, date, new ArrayList<>(locations)));
+                    locations.clear();
+                    id = cursor.getInt(0);
+                    distance = cursor.getDouble(1);
+                    time = cursor.getInt(2);
+                    temp = cursor.getDouble(3);
+                    speed = cursor.getDouble(4);
+                    date = LocalDate.parse(cursor.getString(5));
+                }
+                latitude = cursor.getDouble(7);
+                longitude = cursor.getDouble(8);
+                number = cursor.getInt(9);
+                locations.add(new Loc(latitude, longitude, number, id));
             }while(cursor.moveToNext());
+            trainings.add(new Training(id, distance, time, temp, speed, date, locations));
         }
         cursor.close();
         return trainings;

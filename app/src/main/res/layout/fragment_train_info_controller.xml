@@ -36,7 +36,7 @@
     </RelativeLayout>
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/time_info"
         android:id="@+id/other_info">
         <LinearLayout
@@ -49,6 +49,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:gravity="center"
                 android:text="Speed"
                 android:textAlignment="center"
                 android:textSize="20sp"
@@ -57,6 +58,7 @@
                 android:id="@+id/date_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:gravity="center"
                 android:layout_weight="1"
                 android:text="Date"
                 android:textAlignment="center"
@@ -67,6 +69,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:gravity="center"
                 android:text="Temp"
                 android:textAlignment="center"
                 android:textSize="20sp"
@@ -76,7 +79,9 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="100dp"
+        android:layout_marginTop="50dp"
         android:id="@+id/map_info"
         android:layout_below="@+id/other_info"
         android:layout_centerHorizontal="true">

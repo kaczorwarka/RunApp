@@ -42,6 +42,17 @@ public class Training {
         this.trainingId = id;
         id++;
     }
+    public Training(int trainingId, double distance, int trainingDuration, double temperature,
+                    double speed, LocalDate date, ArrayList<Loc> locations) {
+        this.trainingId = trainingId;
+        this.distance = distance;
+        this.trainingDuration = trainingDuration;
+        this.temperature = temperature;
+        this.speed = speed;
+        this.date = date;
+        this.locations = locations;
+
+    }
 
     //getting from db
     public Training(int trainingId, double distance, int trainingDuration, double temperature,

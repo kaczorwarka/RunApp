@@ -1,5 +1,8 @@
 package com.example.projectapp.Controller;
 
+import android.annotation.SuppressLint;
+import android.app.appsearch.GetByDocumentIdRequest;
+import android.graphics.Color;
 import android.opengl.Visibility;
 import android.os.Bundle;
 
@@ -16,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.projectapp.MainActivity;
+import com.example.projectapp.Objects.Loc;
 import com.example.projectapp.Objects.Training;
 import com.example.projectapp.R;
 import com.example.projectapp.Services.SqlService;
@@ -25,10 +29,13 @@ import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.CustomZoomButtonsController;
 import org.osmdroid.views.MapView;
+import org.osmdroid.views.overlay.Marker;
+import org.osmdroid.views.overlay.Polyline;
 
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Locale;
+import java.util.Objects;
 
 
 public class TrainInfoController extends Fragment {
@@ -40,11 +47,15 @@ public class TrainInfoController extends Fragment {
     private TextView date;
     private Button delete;
     private Training training;
+    private ArrayList<Loc> locations;
     private MapView map;
 
     public TrainInfoController(Training training) {
         // Required empty public constructor
+//        SqlService sqlService = new SqlService(getActivity());
+//        this.locations.addAll(sqlService.getAllLocations(training.getTrainingId()));
         this.training = training;
+        locations = training.getLocations();
     }
 
     @Override
@@ -65,8 +76,12 @@ public class TrainInfoController extends Fragment {
         map.getZoomController().setVisibility(CustomZoomButtonsController.Visibility.ALWAYS);
         map.setMultiTouchControls(true);
         IMapController mapController = map.getController();
-        mapController.setZoom(16.0);
-        GeoPoint startPoint = new GeoPoint(52.17686603, 21.0544879);
+        mapController.setZoom(17.0);
+
+        trainingRoad();
+
+        Loc startPointL = locations.get(0);
+        GeoPoint startPoint = new GeoPoint(startPointL.getLatitude(), startPointL.getLongitude());
         mapController.setCenter(startPoint);
 
 
@@ -102,12 +117,13 @@ public class TrainInfoController extends Fragment {
         temp.setText(tempS);
         date.setText(dateS);
 
+
         return view;
     }
 
     private void deleteRecord(){
         SqlService sqlService = new SqlService(getContext());
-        int answer[] = sqlService.deleteTraining(training);
+        int[] answer = sqlService.deleteTraining(training);
         if(answer[0] < 1 && answer[1] < 1){
             Toast.makeText(getContext(), "Both tables didn't delete", Toast.LENGTH_SHORT).show();
         }else if(answer[0] < 1){
@@ -118,5 +134,37 @@ public class TrainInfoController extends Fragment {
             ((MainActivity)getActivity()).finish();
             ((MainActivity)getActivity()).startActivity(((MainActivity)getActivity()).getIntent());
         }
+    }
+
+    private void trainingRoad(){
+        ArrayList<GeoPoint> points = new ArrayList<>();
+        for(Loc location : locations){
+            points.add(new GeoPoint(location.getLatitude(), location.getLongitude()));
+        }
+
+        Polyline line = new Polyline();
+        line.setPoints(points);
+        line.getOutlinePaint().setColor(Color.RED);
+        line.getOutlinePaint().setStrokeWidth(5);
+        map.getOverlayManager().add(line);
+
+        setMarkers(locations.get(0), "Start");
+        setMarkers(locations.get(locations.size() - 1), "End");
+    }
+
+
+    @SuppressLint("UseCompatLoadingForDrawables")
+    private void setMarkers(Loc point, String title){
+        Marker marker = new Marker(map);
+        marker.setTitle(title);
+        marker.setPosition(new GeoPoint(point.getLatitude(), point.getLongitude()));
+        if(Objects.equals(title, "Start")){
+            marker.setIcon(getResources().getDrawable(R.drawable.round_room_start, null));
+        }else if(Objects.equals(title, "End")){
+            marker.setIcon(getResources().getDrawable(R.drawable.round_room_end, null));
+        }else{
+            marker.setIcon(getResources().getDrawable(R.drawable.round_room_24, null));
+        }
+        map.getOverlays().add(marker);
     }
 }

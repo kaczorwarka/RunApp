@@ -49,4 +49,5 @@ public class ViewHolder extends RecyclerView.ViewHolder{
     public CardView getParent() {
         return parent;
     }
+
 }

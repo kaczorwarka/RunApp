@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.example.projectapp.Objects.Loc;
 import com.example.projectapp.Objects.Training;
 import com.example.projectapp.Services.SqlService;
+import com.example.projectapp.Services.WeatherConnection;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -25,6 +26,8 @@ import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.Priority;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import org.json.JSONException;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -46,6 +49,7 @@ public class RunTraining extends AppCompatActivity {
     private ArrayList<Loc> loc = new ArrayList<>();
     private int distance = 0;
     private double speed = 0;
+    private double temp = 0;
     private ArrayList<Double> speeds = new ArrayList<>();
     private LocationCallback locationCallback;
     private LocationRequest locationRequest;
@@ -125,8 +129,24 @@ public class RunTraining extends AppCompatActivity {
                     time.setText(timeS);
 
                     if(currentLocation != null){
+                        if(seconds == 0){
+                            WeatherConnection weatherConnection = new WeatherConnection(
+                                    currentLocation.getLatitude(),
+                                    currentLocation.getLongitude());
+                            Thread thread = new Thread(weatherConnection);
+                            thread.start();
+                            try {
+                                thread.join();
+                                temp = weatherConnection.getTemp();
+                            } catch (InterruptedException e) {
+                                throw new RuntimeException(e);
+                            }
+                        }
                         if(seconds % 5 == 0){
-                            loc.add(new Loc(currentLocation.getLatitude(),currentLocation.getLongitude(),seconds, Training.getId()));
+                            loc.add(new Loc(currentLocation.getLatitude(),
+                                    currentLocation.getLongitude(),
+                                    seconds,
+                                    Training.getId()));
                             updateSpeed();
                         }
                         seconds++;
@@ -154,8 +174,8 @@ public class RunTraining extends AppCompatActivity {
         int distancePref = distance;
         updateDistance();
         if (seconds > 2){
-            if (distance - distancePref > 0.5){
-                speed = distance - distancePref;
+            if ((distance - distancePref)/5.0 > 0.5){
+                speed = (distance - distancePref)/5.0;
                 speed /= 1000;
                 speed = Math.pow(speed, -1);
             }else{
@@ -198,7 +218,7 @@ public class RunTraining extends AppCompatActivity {
     }
 
     private void saveClicked(){
-        Training training = new Training((double)distance/1000, seconds, 20,
+        Training training = new Training((double)distance/1000, seconds, temp,
                 meanSpeed(), LocalDate.now(), loc);
         SqlService sqlService = new SqlService(RunTraining.this);
 

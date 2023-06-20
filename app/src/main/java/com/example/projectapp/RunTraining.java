@@ -3,6 +3,7 @@ package com.example.projectapp;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
@@ -28,9 +29,12 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.Priority;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Locale;
+import java.util.Properties;
 
 
 public class RunTraining extends AppCompatActivity {
@@ -57,6 +61,7 @@ public class RunTraining extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         setContentView(R.layout.activity_run_training);
         super.onCreate(savedInstanceState);
 
@@ -111,6 +116,7 @@ public class RunTraining extends AppCompatActivity {
     }
 
     private void runTimer() {
+        Context context = this;
         Handler handler = new Handler();
 
         handler.post(new Runnable() {
@@ -129,7 +135,8 @@ public class RunTraining extends AppCompatActivity {
                         if(seconds == 0){
                             APIConnection apiConnection = new APIConnection(
                                     currentLocation.getLatitude(),
-                                    currentLocation.getLongitude());
+                                    currentLocation.getLongitude(),
+                                    context);
                             Thread thread = new Thread(apiConnection);
                             thread.start();
                             try {
@@ -246,4 +253,5 @@ public class RunTraining extends AppCompatActivity {
                 locationCallback,
                 Looper.getMainLooper());
     }
+
 }

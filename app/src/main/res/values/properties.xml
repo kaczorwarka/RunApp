@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="api_key">88fc50c7e7e34d85829142219232804</string>
+    <string name="base_url">https://api.weatherapi.com/</string>
+    <string name="aqi">no</string>
+</resources>

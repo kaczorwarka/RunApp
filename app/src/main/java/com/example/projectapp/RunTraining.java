@@ -16,6 +16,8 @@ import android.widget.Toast;
 
 import com.example.projectapp.Objects.Loc;
 import com.example.projectapp.Objects.Training;
+import com.example.projectapp.Services.API.APIConnection;
+import com.example.projectapp.Services.API.WeatherForecast;
 import com.example.projectapp.Services.SqlService;
 import com.example.projectapp.Services.WeatherConnection;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -43,17 +45,14 @@ public class RunTraining extends AppCompatActivity {
     private Button save;
     private FusedLocationProviderClient fusedLocationClient;
     private int seconds = 0;
-    private ArrayList<Loc> loc = new ArrayList<>();
+    private final ArrayList<Loc> loc = new ArrayList<>();
     private int distance = 0;
     private double speed = 0;
     private double temp = 0;
-    private ArrayList<Double> speeds = new ArrayList<>();
+    private final ArrayList<Double> speeds = new ArrayList<>();
     private LocationCallback locationCallback;
     private LocationRequest locationRequest;
     private Location currentLocation;
-    private final double converter = 111196.672;
-
-
 
 
     @Override
@@ -113,6 +112,7 @@ public class RunTraining extends AppCompatActivity {
 
     private void runTimer() {
         Handler handler = new Handler();
+
         handler.post(new Runnable() {
             @Override
             public void run() {
@@ -127,14 +127,14 @@ public class RunTraining extends AppCompatActivity {
 
                     if(currentLocation != null){
                         if(seconds == 0){
-                            WeatherConnection weatherConnection = new WeatherConnection(
+                            APIConnection apiConnection = new APIConnection(
                                     currentLocation.getLatitude(),
                                     currentLocation.getLongitude());
-                            Thread thread = new Thread(weatherConnection);
+                            Thread thread = new Thread(apiConnection);
                             thread.start();
                             try {
                                 thread.join();
-                                temp = weatherConnection.getTemp();
+                                temp = apiConnection.getTemp();
                             } catch (InterruptedException e) {
                                 throw new RuntimeException(e);
                             }
@@ -186,6 +186,7 @@ public class RunTraining extends AppCompatActivity {
             Loc location1 = loc.get(loc.size()-1);
             Loc location2 = loc.get(loc.size()-2);
             double distancePoint = calculateLength(location1, location2);
+            double converter = 111196.672;
             distance += distancePoint * converter;
         }
     }
@@ -201,6 +202,7 @@ public class RunTraining extends AppCompatActivity {
         play.setVisibility(View.VISIBLE);
         save.setVisibility(View.VISIBLE);
         running = !running;
+
     }
 
     private void playClicked() {
@@ -215,6 +217,7 @@ public class RunTraining extends AppCompatActivity {
     }
 
     private void saveClicked(){
+        System.out.println("temp: " + temp);
         Training training = new Training((double)distance/1000, seconds, temp,
                 meanSpeed(), LocalDate.now(), loc);
         SqlService sqlService = new SqlService(RunTraining.this);

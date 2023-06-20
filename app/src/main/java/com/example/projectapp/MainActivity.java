@@ -1,12 +1,23 @@
 package com.example.projectapp;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.LocationManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 
@@ -20,11 +31,15 @@ import org.osmdroid.config.Configuration;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import android.Manifest;
 
 
 public class MainActivity extends AppCompatActivity {
 
+    private final int LOCATION_PERMISSION_CODE = 1;
+    private final int INTERNET_PERMISSION_CODE = 2;
 
+    int permissionCounter = 1;
     private Toolbar topAppBar;
 
     private ArrayList<Training> trainings = new ArrayList<>();
@@ -43,9 +58,8 @@ public class MainActivity extends AppCompatActivity {
 
         SqlService sqlService = new SqlService(this);
         Training.setId(sqlService.setTrainingId()+1);
-
         runTraining = findViewById(R.id.run_training);
-        runTraining.setOnClickListener(view -> openRunTraining());
+        setUpPermissions();
 
     }
 
@@ -96,9 +110,60 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void openRunTraining(){
-        Intent intent = new Intent(this, RunTraining.class);
-        startActivity(intent);
 
+        if(isInternetAvailable(getApplicationContext()) && isLocationEnabled(getApplicationContext())){
+            Intent intent = new Intent(this, RunTraining.class);
+            startActivity(intent);
+        }else{
+            new AlertDialog.Builder(this)
+                    .setTitle("No Internet or Location")
+                    .setMessage("Make sure that you have internet connection and localization on")
+                    .setPositiveButton("ok", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            dialogInterface.dismiss();
+                        }
+                    }).create().show();
+        }
     }
 
+    public boolean isInternetAvailable(Context context) {
+        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (connectivityManager != null) {
+            NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+            return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+        }
+        return false;
+    }
+
+    public boolean isLocationEnabled(Context context) {
+        LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+
+        if (locationManager != null) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                return locationManager.isLocationEnabled();
+            }
+        }
+        return false;
+    }
+
+    private void setUpPermissions(){
+        if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},LOCATION_PERMISSION_CODE);
+        }else{
+            runTraining.setOnClickListener(view -> openRunTraining());
+        }
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if(requestCode == LOCATION_PERMISSION_CODE || requestCode == INTERNET_PERMISSION_CODE){
+            if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                runTraining.setOnClickListener(view -> openRunTraining());
+            }
+        }else{
+            super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
+    }
 }

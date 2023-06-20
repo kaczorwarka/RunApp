@@ -21,8 +21,6 @@ import java.util.Locale;
 public class TrainingAdapter extends RecyclerView.Adapter<ViewHolder> {
 
 
-
-    //do wymiany na bazę danych
     private ArrayList<Training> trainings = new ArrayList<>();
 
     public TrainingAdapter(Context context) {

@@ -9,7 +9,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class WeatherConnection  implements Runnable{
+public class WeatherConnection{
 
     private double latitude;
     private double longitude;
@@ -60,7 +60,7 @@ public class WeatherConnection  implements Runnable{
 
     }
 
-    @Override
+
     public void run() {
         String link = setLink();
         getConnection("http://api.weatherapi.com/v1/current.json?key=88fc50c7e7e34d85829142219232804&q=Warsaw&aqi=no");

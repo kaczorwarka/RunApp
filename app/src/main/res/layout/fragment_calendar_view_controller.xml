@@ -15,27 +15,32 @@
 
         <ImageButton
             android:id="@+id/back"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
             android:background="@color/no"
-            android:src="@drawable/back"/>
+            android:contentDescription="@string/go_back"
+            android:src="@drawable/back" />
+
         <TextView
             android:id="@+id/month"
-            android:gravity="center"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="48dp"
             android:layout_weight="1"
-            android:text="Month"
+            android:gravity="center"
+            android:text=""
             android:textAlignment="center"
             android:textColor="@color/black"
             android:textSize="20sp"
-            android:textStyle="bold"/>
+            android:textStyle="bold" />
+
         <ImageButton
             android:id="@+id/forward"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
             android:background="@color/no"
-            android:src="@drawable/forward"/>
+            android:src="@drawable/forward"
+            android:text=""
+            android:contentDescription="@string/go_forward"/>
 
     </LinearLayout>
 

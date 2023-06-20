@@ -17,4 +17,8 @@
     <string name="speed2">Speed</string>
     <string name="save">SAVE</string>
     <string name="delete">DELETE</string>
+    <string name="go_back">Go Back</string>
+    <string name="go_forward">Go Forward</string>
+    <string name="pause">Pause</string>
+    <string name="play">Play</string>
 </resources>
